@@ -7,22 +7,23 @@ def print_full(x):
         pd.set_option('display.max_rows', len(x))
         print(x)
         pd.reset_option('display.max_rows')
+count = 1
+lotes = []
+index = []
+fecha = []
+refil = []
+producto = []
+dimension = []
 
 #IMPORTACION DE BASE DE DATOS
 demoras = input('Archivo de datos de demoras >> ')
 produccion = input('Archivo de datos de produccion >> ')
 
-#date = "31-07-2019"
-#demoras = read_excel(date +' - Demoras.xlsx')
+
+#demoras = read_excel('demoras.xlsx')
 #demoras.set_index('Bobina')
-#produccion = read_excel(date +'.xlsx')
+#produccion = read_excel('produccion.xlsx')
 #produccion.set_index('Bobina')
-
-demoras = read_excel(demoras)
-demoras.set_index('Bobina')
-produccion = read_excel(produccion)
-produccion.set_index('Bobina')
-
 
 
 # Lista de refilados
@@ -39,18 +40,12 @@ for i in range(0,len(produccion)-1):
 
 
 # Lista de Lotes
-lotes = []
-index = []
-count = 1
-fecha = []
-refil = []
-producto = []
-dimension = []
+
 for i in range(1, len(produccion)):        
         if produccion.at[i-1,'Ancho'] == produccion.at[i,'Ancho']:
                 count = count+1                
         else:
-                if list(produccion.index)[i] in list(demoras.index): # and demoras.at[list(produccion.index)[i],'Duracion']>=3: #demoras.Duracion[list(produccion.index)[i]]>1: #
+                if list(produccion.index)[i] in list(demoras.index) and count<=10.0:
                         lotes.append(count)
                         fecha.append(produccion.at[list(produccion.index)[i],'Fecha Produccion'])
                         refil.append(produccion.at[list(produccion.index)[i],'REFILADO'])
@@ -68,3 +63,4 @@ result = {'Fecha Produccion': fecha, 'Dimension': dimension,'Cantidad de bobinas
 result = pd.DataFrame(data=result)
 result.to_html('prueba.html')
 print(result)
+exit = input('Presione Enter para cerrar el programa...')
