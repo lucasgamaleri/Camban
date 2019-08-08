@@ -16,14 +16,13 @@ producto = []
 dimension = []
 
 #IMPORTACION DE BASE DE DATOS
-demoras = input('Archivo de datos de demoras >> ')
-produccion = input('Archivo de datos de produccion >> ')
+demoras = input('Archivo de datos de demoras >> ')+'.xlsx'
+produccion = input('Archivo de datos de produccion >> ')+'.xlsx'
 
 
-#demoras = read_excel('demoras.xlsx')
+demoras = read_excel(demoras)
 #demoras.set_index('Bobina')
-#produccion = read_excel('produccion.xlsx')
-#produccion.set_index('Bobina')
+produccion = read_excel(produccion)
 
 
 # Lista de refilados
@@ -40,20 +39,29 @@ for i in range(0,len(produccion)-1):
 
 
 # Lista de Lotes
+print('Analizar las siguientes bobinas en el Gantt')
+for i in range(1, len(produccion)):
+    if cambiodeancho[i] == True:
+        cambiodeancho[i] = 'SI'
+        fechaproduccion = produccion.at[i,'Fecha Produccion']
+        print('Fecha:', fechaproduccion ,' --- Bobina:', produccion.Bobina[i], ' --- Cambio de ancho:', cambiodeancho[i])
+        
 
+bobinademora=list(demoras.Bobina)
 for i in range(1, len(produccion)):        
-        if produccion.at[i-1,'Ancho'] == produccion.at[i,'Ancho']:
+        if produccion.Ancho[i-1] == produccion.Ancho[i]:
                 count = count+1                
         else:
-                if list(produccion.index)[i] in list(demoras.index) and count<=10.0:
+                if produccion.Bobina[i] in bobinademora and count<10 and cambiodeancho[i]=='SI' and produccion.REFILADO[i]==True:
                         lotes.append(count)
-                        fecha.append(produccion.at[list(produccion.index)[i],'Fecha Produccion'])
-                        refil.append(produccion.at[list(produccion.index)[i],'REFILADO'])
-                        producto.append(produccion.at[list(produccion.index)[i],'Grupo Calidad'])
-                        dimension.append(str(produccion.at[list(produccion.index)[i],'Espesor'])+'x'+str(produccion.at[list(produccion.index)[i],'Ancho']))
+                        fecha.append(produccion.at[i,'Fecha Produccion'])
+                        refil.append(produccion.at[i,'REFILADO'])
+                        producto.append(produccion.at[i,'Grupo Calidad'])
+                        dimension.append(str(produccion.at[i,'Espesor'])+'x'+str(produccion.at[i,'Ancho']))
                         count = 1
                 else:
                         count = count+1
+        
 
 demoras = {'Bobina': demoras.Bobina, 'Duracion de la demora': demoras.Duracion }
 demoras = pd.DataFrame(data=demoras)
