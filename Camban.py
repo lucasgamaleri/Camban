@@ -1,5 +1,5 @@
 import pandas as pd
-from pandas import *#read_excel
+from pandas import *
 import xlrd
 
 #Definiciones y funciones
@@ -16,13 +16,18 @@ producto = []
 dimension = []
 
 #IMPORTACION DE BASE DE DATOS
-demoras = input('Archivo de datos de demoras >> ')+'.xlsx'
-produccion = input('Archivo de datos de produccion >> ')+'.xlsx'
+demoras = 'SGL_Produccion_DECAPADO_EDA_Decapado_EDA '+input('Fecha de datos de demoras (Ej: 09-Ago)>> ')+'.xlsx'
+produccion = 'SGL_Demoras_Decapado_EDA '+input('Fecha de datos de produccion >> ')+'.xlsx'
 
 
 demoras = read_excel(demoras)
 #demoras.set_index('Bobina')
 produccion = read_excel(produccion)
+
+#HAY QUE HACER ALGO POR EL ESTILO, CREAR NUEVO DATAFRAME PARA PRODUCCION
+#Y DEMORAS CON LA INFORMACION IMPORTADA PARA QUE SEA MAS FACIL DE ANALIZAR POR LOS ALGORITMOS
+#demoras = {'Bobina': demoras.Bobina, 'Duracion de la demora': demoras.Duracion }
+#demoras = pd.DataFrame(data=demoras)
 
 
 # Lista de refilados
