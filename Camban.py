@@ -15,38 +15,39 @@ refil = []
 producto = []
 dimension = []
 Condicion = True
-
+status = False
 
 
 
 
 def Buscar_NombreArchivo(): #IMPORTACION DE BASE DE DATOS
-        print('¿Ha cambiado el nombre de archivo agregando la fecha de produccion y demora? [y/n]')
-        cline = input('\n')
+        cline = input('¿Ha cambiado el nombre de archivo agregando la fecha de produccion y demora? [y/n]')
         if cline == 'y':
                 Condicion = True
         elif cline == 'n':
                 Condicion = False
         else:
                 raise ValueError('No ha introducido una opción correcta')
+                status = False
         if Condicion:
                 produccion = 'SGL_Produccion_DECAPADO_EDA_Decapado_EDA '+input('Fecha de datos de demoras (Ej: 09-Ago)>> ')+'.xlsx'
                 demoras = 'SGL_Demoras_Decapado_EDA '+input('Fecha de datos de produccion >> ')+'.xlsx'
         else:
                 produccion = 'SGL_Produccion_DECAPADO_EDA_Decapado_EDA.xlsx'
                 demoras = 'SGL_Demoras_Decapado_EDA.xlsx'
-        demoras = read_excel(demoras)
-        #demoras.set_index('Bobina')
-        produccion = read_excel(produccion)
-        status = True
-        return status, demoras, produccion
+        try:
+                demoras = read_excel(demoras)
+                #demoras.set_index('Bobina')
+                produccion = read_excel(produccion)
+                status = True
+                return status, demoras, produccion
+        except:
+                status = False
+                return status
+        
+while status != True:
+        Buscar_NombreArchivo()
 
-try:
-        Buscar_NombreArchivo()
-except (ValueError):
-        Buscar_NombreArchivo()
-        
-        
 
 
 #HAY QUE HACER ALGO POR EL ESTILO, CREAR NUEVO DATAFRAME PARA PRODUCCION
@@ -56,7 +57,7 @@ except (ValueError):
 
 
 # Lista de refilados
-#produccion = produccion.assign(REFILADO=lambda x: produccion['Material Refilado']!=0)
+produccion = produccion.assign(REFILADO=lambda x: produccion['Material Refilado']!=0)
 
 
 # Lista de cambios de ancho
