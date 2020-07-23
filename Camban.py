@@ -14,15 +14,40 @@ fecha = []
 refil = []
 producto = []
 dimension = []
-
-#IMPORTACION DE BASE DE DATOS
-demoras = 'SGL_Produccion_DECAPADO_EDA_Decapado_EDA '+input('Fecha de datos de demoras (Ej: 09-Ago)>> ')+'.xlsx'
-produccion = 'SGL_Demoras_Decapado_EDA '+input('Fecha de datos de produccion >> ')+'.xlsx'
+Condicion = True
 
 
-demoras = read_excel(demoras)
-#demoras.set_index('Bobina')
-produccion = read_excel(produccion)
+
+
+
+def Buscar_NombreArchivo(): #IMPORTACION DE BASE DE DATOS
+        print('¿Ha cambiado el nombre de archivo agregando la fecha de produccion y demora? [y/n]')
+        cline = input('\n')
+        if cline == 'y':
+                Condicion = True
+        elif cline == 'n':
+                Condicion = False
+        else:
+                raise ValueError('No ha introducido una opción correcta')
+        if Condicion:
+                produccion = 'SGL_Produccion_DECAPADO_EDA_Decapado_EDA '+input('Fecha de datos de demoras (Ej: 09-Ago)>> ')+'.xlsx'
+                demoras = 'SGL_Demoras_Decapado_EDA '+input('Fecha de datos de produccion >> ')+'.xlsx'
+        else:
+                produccion = 'SGL_Produccion_DECAPADO_EDA_Decapado_EDA.xlsx'
+                demoras = 'SGL_Demoras_Decapado_EDA.xlsx'
+        demoras = read_excel(demoras)
+        #demoras.set_index('Bobina')
+        produccion = read_excel(produccion)
+        status = True
+        return status, demoras, produccion
+
+try:
+        Buscar_NombreArchivo()
+except (ValueError):
+        Buscar_NombreArchivo()
+        
+        
+
 
 #HAY QUE HACER ALGO POR EL ESTILO, CREAR NUEVO DATAFRAME PARA PRODUCCION
 #Y DEMORAS CON LA INFORMACION IMPORTADA PARA QUE SEA MAS FACIL DE ANALIZAR POR LOS ALGORITMOS
@@ -31,7 +56,7 @@ produccion = read_excel(produccion)
 
 
 # Lista de refilados
-produccion = produccion.assign(REFILADO=lambda x: produccion['Material Refilado']!=0)
+#produccion = produccion.assign(REFILADO=lambda x: produccion['Material Refilado']!=0)
 
 
 # Lista de cambios de ancho
